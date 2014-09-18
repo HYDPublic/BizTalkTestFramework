@@ -43,9 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DictionaryHelpers.cs" />
     <Compile Include="MockMessage.cs" />
     <Compile Include="MockMessageContext.cs" />
     <Compile Include="MockMessagePart.cs" />
+    <Compile Include="MockBasePropertyBag.cs" />
     <Compile Include="MockPropertyBag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

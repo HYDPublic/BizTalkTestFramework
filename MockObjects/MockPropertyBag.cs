@@ -4,41 +4,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Collections.Specialized;
-
 
 namespace BizTalkTestFramework.MockObjects
 {
     public sealed class MockPropertyBag : IBasePropertyBag
     {
-        Dictionary<XmlQualifiedName, object> _bag = new Dictionary<XmlQualifiedName,object>();
+
+        private MockBasePropertyBag _wrapped = new MockBasePropertyBag();
+
+
 
         public uint CountProperties
         {
-            get { return (uint)_bag.Count; }
+            get { return _wrapped.CountProperties; }
         }
 
         public object Read(string strName, string strNamespace)
         {
-            return _bag[new XmlQualifiedName(strName,strNamespace)];
+            return _wrapped.Read(strName, strNamespace);
         }
 
         public object ReadAt(int index, out string strName, out string strNamespace)
         {
-            var key = _bag.Keys.ToList()[index];
-            strNamespace = key.Namespace;
-            strName = key.Name;
-            return _bag[key];
+            return _wrapped.ReadAt(index,out strName, out strNamespace);
         }
 
         public void Write(string strName, string strNameSpace, object obj)
         {
-            var key = new XmlQualifiedName(strName, strNameSpace);
-            if (_bag.ContainsKey(key))
-                _bag[key] = obj;
-            else _bag.Add(key, obj);
-
+            _wrapped.Write(strName, strNameSpace, obj);
         }
     }
 }
