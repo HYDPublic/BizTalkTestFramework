@@ -146,7 +146,10 @@ namespace BizTalkTestFramework.MockObjects
         /// <param name="fImplemented">true if the IBaseMessage object can determine the size; otherwise, false.</param>
         public void GetSize(out ulong lSize, out bool fImplemented)
         {
-            throw new NotImplementedException();
+            // TODO: Try to understand the size of "what"... the serialized message? or the sum of part streams? or what?
+            // While trying to understand, just return false as fImplemented.
+            lSize = 0;
+            fImplemented = false;
         }
 
         /// <summary>
@@ -154,7 +157,10 @@ namespace BizTalkTestFramework.MockObjects
         /// </summary>
         public bool IsMutable
         {
-            get { throw new NotImplementedException(); }
+            get { 
+                // TODO: Should add an immutable version, right now the mock is mutable therefore i must return true;
+                return true;
+            }
         }
 
 

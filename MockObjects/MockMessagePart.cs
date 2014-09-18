@@ -9,15 +9,51 @@ namespace BizTalkTestFramework.MockObjects
 {
     public sealed class MockMessagePart : IBaseMessagePart
     {
+        #region Implementation
+
+        private IBasePropertyBag _bag = new MockPropertyBag();
+
+        private Guid _partId = Guid.Empty;
+
+        private string _charset;
+        private string _contentType;
+
+        private System.IO.Stream _partStream;
+        #endregion
+
+        public Guid PartID
+        {
+            get
+            {
+                if (_partId == Guid.Empty)
+                {
+                    _partId = Guid.NewGuid();
+                }
+                return _partId;
+            }
+        }
+
+        public IBasePropertyBag PartProperties
+        {
+            get
+            {
+                return _bag;
+            }
+            set
+            {
+                _bag = value;
+            }
+        }
+
         public string Charset
         {
             get
             {
-                throw new NotImplementedException();
+                return _charset;
             }
             set
             {
-                throw new NotImplementedException();
+                _charset = value;
             }
         }
 
@@ -25,11 +61,11 @@ namespace BizTalkTestFramework.MockObjects
         {
             get
             {
-                throw new NotImplementedException();
+                return _contentType;
             }
             set
             {
-                throw new NotImplementedException();
+                _contentType = value;
             }
         }
 
@@ -47,11 +83,34 @@ namespace BizTalkTestFramework.MockObjects
 
         public System.IO.Stream GetOriginalDataStream()
         {
-            throw new NotImplementedException();
+            return _partStream;
         }
 
+        /// <summary>
+        /// <remarks>according to http://msdn.microsoft.com/en-us/library/system.io.filestream.canseek(v=vs.110).aspx if a class derived from Stream does not support seeking, calls to Length, SetLength, Position, and Seek throw a NotSupportedException.</remarks>
+        /// </summary>
+        /// <param name="lSize"></param>
+        /// <param name="fImplemented"></param>
         public void GetSize(out ulong lSize, out bool fImplemented)
         {
+            if (!_partStream.CanSeek)
+            {
+                fImplemented = false;
+                lSize = 0;
+            }
+            else
+            {
+                try
+                {
+                    fImplemented = true;
+                    lSize = (ulong)_partStream.Length;
+                }
+                catch (NotSupportedException)
+                {
+                    fImplemented = false;
+                    lSize = 0;                    
+                }
+            }
             throw new NotImplementedException();
         }
 
@@ -60,21 +119,5 @@ namespace BizTalkTestFramework.MockObjects
             get { throw new NotImplementedException(); }
         }
 
-        public Guid PartID
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public IBasePropertyBag PartProperties
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
     }
 }
